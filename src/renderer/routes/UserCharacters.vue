@@ -70,10 +70,9 @@ import { Char } from "../interfaces/Asset";
 import Navbar from "../components/Navbar.vue";
 import { onMounted, reactive, ref, useTemplateRef } from "vue";
 import { apiServer } from "../utils/AppInit";
-import DataList from "../components/DataList.vue/index.js";
+import DataList from "../components/DataList.vue";
 import CharListRow from "../components/list/rows/CharListRow.vue";
 import { DataListRow2, EntryKey, ListFieldColumn, SelectedListSort } from "../interfaces/DataList";
-import { useNavbar } from "../composables/useNavbar";
 import Dropdown from "../components/controls/DropdownMenu.vue";
 import DropdownItem from "../components/controls/DropdownItem.vue";
 import { Theme, useThemeList } from "../composables/useThemeList";
@@ -316,14 +315,6 @@ function dataList_sortChange(newSort:EntryKey<Char>) {
 	chars.value = chars.value.sort(charSort);
 }
 
-const navbar = useNavbar();
-navbar.setRouteState({
-	entries: [
-		{
-			title: "Characters"
-		}
-	]
-});
 initList();
 onMounted(async () => {
 	isLoading.value = true;
