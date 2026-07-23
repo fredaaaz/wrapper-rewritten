@@ -1,4 +1,4 @@
-<style src="./data_list_options.css"/>
+<style src="../../../css/data_list_options.css"/>
 
 <script setup lang="ts">
 import { apiServer } from "../../../utils/AppInit";

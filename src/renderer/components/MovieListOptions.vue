@@ -2,6 +2,7 @@
 import { apiServer } from "../utils/AppInit";
 import type { Movie } from "../interfaces/Movie";
 import openPlayerWindow from "../utils/openPlayerWindow";
+import openExportWindow from "../utils/openExportWindow";
 import en_US from "../locale/en_US";
 
 const emit = defineEmits<{
@@ -18,6 +19,13 @@ const isSingular = !Array.isArray(props.entry);
  */
 function playBtn_click() {
 	openPlayerWindow((props.entry as Movie).id);
+}
+
+/**
+ * called when the MP4 export button is clicked
+ */
+function exportBtn_click() {
+	openExportWindow((props.entry as Movie).id);
 }
 
 /**
@@ -83,6 +91,14 @@ function idsAsArray() {
 			v-tooltip="'Download project files'"
 			@click.stop>
 			<i class="ico download"></i>
+		</a>
+		<a
+			v-show="isSingular"
+			class="option"
+			href="javascript:;"
+			v-tooltip="'Export MP4'"
+			@click.stop.prevent="exportBtn_click">
+			<i class="ico film"></i>
 		</a>
 		<a class="option" href="javascript:;" v-tooltip="'Delete'" @click.stop.prevent="deleteBtn_click">
 			<i class="ico trash"></i>

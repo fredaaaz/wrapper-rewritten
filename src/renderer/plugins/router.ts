@@ -4,6 +4,7 @@ import type { RouteRecordRaw } from "vue-router";
 const CCView = () => import("../routes/CCView.vue");
 const DefaultLayout = () => import("../DefaultLayout.vue");
 const Error404View = () => import("../routes/Error404View.vue");
+const ExportView = () => import("../routes/ExportView.vue");
 const PlayerView = () => import("../routes/PlayerView.vue");
 const StudioView = () => import("../routes/StudioView.vue");
 const UserCharacters = () => import("../routes/UserCharacters.vue");
@@ -85,6 +86,13 @@ const routes:RouteRecordRaw[] = [
 		component: PlayerView,
 		meta: {
 			title: "Video Player"
+		},
+	},
+	{
+		path: "/movies/export/:movieId",
+		component: ExportView,
+		meta: {
+			title: "Export MP4"
 		},
 	},
 	{

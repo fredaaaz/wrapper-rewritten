@@ -5,16 +5,49 @@ License: MIT
 
 Object.assign(process.env, require("../../env.json"), require("../../config.json"));
 
-import { app, BrowserWindow, Menu, shell, ipcMain } from "electron";
-import { createWriteStream } from "fs";
+import { app, BrowserWindow, Menu, shell, ipcMain, dialog } from "electron";
+import { copyFile, createWriteStream } from "fs";
 import Directories from "./storage/directories";
 import { join } from "path";
 import settings from "./storage/settings";
 import { startAll } from "./server/index";
+import exportJobs from "./server/export/jobManager";
 
 const IS_DEV = app.commandLine.getSwitchValue("dev").length > 0;
 
 startAll();
+
+ipcMain.handle("export-save-as", async (_, jobId:string) => {
+	const output = exportJobs.getCompletedOutput(jobId);
+	const selection = await dialog.showSaveDialog({
+		title: "Save exported MP4",
+		defaultPath: join(app.getPath("videos"), output.filename),
+		filters: [{ name:"MP4 video", extensions:["mp4"] }],
+	});
+	if (selection.canceled || !selection.filePath) {
+		return { cancelled:true };
+	}
+	await new Promise<void>((resolve, reject) => {
+		copyFile(output.filepath, selection.filePath as string, error => {
+			if (error) reject(error);
+			else resolve();
+		});
+	});
+	return { cancelled:false };
+});
+ipcMain.handle("export-open-file", async (_, jobId:string) => {
+	const output = exportJobs.getCompletedOutput(jobId);
+	const error = await shell.openPath(output.filepath);
+	if (error) {
+		throw new Error(error);
+	}
+	return true;
+});
+ipcMain.handle("export-open-folder", (_, jobId:string) => {
+	const output = exportJobs.getCompletedOutput(jobId);
+	shell.showItemInFolder(output.filepath);
+	return true;
+});
 
 /*
 log files
@@ -124,6 +157,7 @@ app.whenReady().then(() => {
 app.on("window-all-closed", () => {
 	if (process.platform !== "darwin") app.quit();
 });
+app.on("before-quit", () => exportJobs.shutdownSync());
 
 function updateMenuVisibility(newValue:boolean) {
 	mainWindow.setAutoHideMenuBar(newValue);

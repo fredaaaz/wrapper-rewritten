@@ -122,7 +122,7 @@ if (process.argv.includes("--dev")) {
 		await ctx.rebuild();
 		await ctx.dispose();
 	}
-	mkdirSync(join(import.meta.dirname, "../dist/scripts"));
+	mkdirSync(join(import.meta.dirname, "../dist/scripts"), { recursive:true });
 	copyFileSync(
 		join(import.meta.dirname, "./fixModules.js"),
 		join(import.meta.dirname, "../dist/scripts/fixModules.js"),
@@ -145,12 +145,4 @@ if (process.argv.includes("--dev")) {
 		main: "main.js"
 	};
 	writeFileSync("dist/package.json", JSON.stringify(pkgJson));
-	spawn(
-		"npm i",
-		{
-			shell: true,
-			cwd: join(import.meta.dirname, "../dist"),
-			stdio: "inherit"
-		}
-	);
 }

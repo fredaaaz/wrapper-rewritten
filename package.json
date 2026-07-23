@@ -7,11 +7,11 @@
 	"private": true,
 	"scripts": {
 		"postinstall": "node scripts/fixModules.js",
-		"test": "mocha",
+		"test": "mocha --require esbuild-register test/**/*.test.ts",
 		"dev": "concurrently \"node scripts/build.mjs --dev\" \"vite dev\"",
 		"build": "vite build && node scripts/build.mjs",
 		"preview": "npm run build && electron dist/main.js",
-		"package": "npm run build && npx electron-packager dist --ignore=^/resources/static"
+		"package": "npm run build && npm --prefix dist install --omit=dev && npx electron-packager dist --extra-resource=resources"
 	},
 	"engines": {
 		"node": ">=16"
@@ -51,7 +51,9 @@
 		"electron": "^11.5.0",
 		"electron-packager": "^15.5.1",
 		"esbuild": "^0.27.0",
+		"esbuild-register": "^3.6.0",
 		"js-base64": "^3.7.2",
+		"mocha": "^10.8.2",
 		"vite": "^6.4.1"
 	},
 	"repository": {
