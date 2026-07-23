@@ -6,6 +6,9 @@
 
 Wrapper: Offline is a program designed to provide readily obtainable, irrevocable access to GoAnimate's retired assets in the modern era. It achieves this by replicating the original API and asset servers entirely on the user's computer while providing a simplistic frontend to interact with them. This project is important for archival purposes, as the ability to use the legacy GoAnimate editor and themes would be far trickier without it.
 
+## Exporting videos
+Saved movies have two separate download actions. **Download project files** saves the editable Wrapper ZIP, while **Export MP4** opens the rendered-video exporter. The exporter preserves the movie's aspect ratio, renders the actual Flash movie, mixes its voice, music, and sound-effect tracks, and offers Save As, Open file, and Open containing folder actions when it finishes.
+
 ## Downloads / Installation
 To run Wrapper: Offline, you must first download the [latest release](https://github.com/wrapper-offline/wrapper-offline/releases/tag/v2.0.1). The installation process is pretty straightforward; you extract the archive and run the executable inside.
 
@@ -29,7 +32,9 @@ To build a full copy of Offline:
 ```
 npm run package
 ```
-*You will need to copy the `resources` folder manually. It needs to go in the resources folder of the build.*
+The packaging command installs the runtime-only dependencies in `dist` and copies the complete `resources` tree into the Electron application. This includes Flash Player, the animation SWFs, FFmpeg, and FFprobe support required by MP4 export.
+
+The MP4 exporter's architecture and debugging notes are documented in [docs/mp4-exporter.md](docs/mp4-exporter.md).
 
 ## License
 Most of this project is free/libre software[1] under the MIT license. You have the freedom to run, change, and share this as much as you want.
